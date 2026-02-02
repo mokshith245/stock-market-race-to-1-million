@@ -1,0 +1,133 @@
+# Stock Prediction Credibility Scoring System - Configuration
+
+# =============================================================================
+# DATA PATHS
+# =============================================================================
+data:
+  # Input Reddit data files
+  posts_file: "~/Documents/stock-market-race-to-1-million/r_TheRaceTo10Million_posts.jsonl"
+  comments_file: "~/Documents/stock-market-race-to-1-million/r_TheRaceTo10Million_comments.jsonl"
+
+  # Output directories
+  output_dir: "data/processed"
+  prices_dir: "data/processed/prices"
+  logs_dir: "logs"
+
+  # Intermediate output files
+  valid_tickers_file: "data/valid_tickers.txt"
+  ticker_mentions_file: "data/processed/ticker_mentions.jsonl"
+  unique_tickers_file: "data/processed/unique_tickers.txt"
+  mentions_with_outcomes_file: "data/processed/mentions_with_outcomes.jsonl"
+  mentions_with_sentiment_file: "data/processed/mentions_with_sentiment.jsonl"
+  mentions_final_file: "data/processed/mentions_final.jsonl"
+  user_statistics_file: "data/processed/user_statistics.csv"
+  credibility_scores_file: "data/processed/credibility_scores.csv"
+
+# =============================================================================
+# TICKER EXTRACTION (Pass 1)
+# =============================================================================
+ticker_extraction:
+  # Confidence levels for extraction
+  # HIGH: $TICKER format (e.g., "$AAPL")
+  # MEDIUM: Action context (e.g., "bought AAPL", "selling TSLA")
+  # LOW: Standalone ticker requiring NER validation
+
+  # Minimum confidence to include a mention
+  min_confidence: "MEDIUM"
+
+  # Action words that indicate stock discussion
+  action_words:
+    - "buy"
+    - "bought"
+    - "buying"
+    - "sell"
+    - "sold"
+    - "selling"
+    - "long"
+    - "short"
+    - "calls"
+    - "puts"
+    - "holding"
+    - "hold"
+    - "yolo"
+    - "position"
+
+# =============================================================================
+# PRICE DATA (Pass 2)
+# =============================================================================
+prices:
+  # Benchmark for alpha calculation
+  benchmark_ticker: "SPY"
+
+  # Forward return period in calendar days
+  forward_days: 14
+
+  # Yahoo Finance download settings
+  download_batch_size: 50
+  download_delay_seconds: 1
+
+# =============================================================================
+# SENTIMENT CLASSIFICATION (Pass 3)
+# =============================================================================
+sentiment:
+  # Model for financial sentiment
+  model_name: "ProsusAI/finbert"
+
+  # Batch size for inference
+  batch_size: 32
+
+  # Minimum confidence to assign sentiment (otherwise NEUTRAL)
+  min_confidence: 0.6
+
+# =============================================================================
+# FIRST-MOVER DETECTION (Pass 4)
+# =============================================================================
+first_mover:
+  # Time windows for classification (in hours)
+  # FIRST_MOVER: First mention of ticker in subreddit
+  # EARLY_ADOPTER: Within this window of first mention
+  early_adopter_window_hours: 24
+
+  # TREND_FOLLOWER: More than this many mentions before user's mention
+  trend_follower_threshold: 10
+
+  # Pump detection: Multiple mentions of same ticker by same user
+  pump_mention_threshold: 3
+  pump_window_hours: 48
+
+# =============================================================================
+# USER AGGREGATION (Pass 5)
+# =============================================================================
+aggregation:
+  # Minimum mentions to include user in final scoring
+  min_mentions: 5
+
+  # Bayesian adjustment parameters
+  # Prior assumes average user has 0% alpha
+  bayesian_prior_mean: 0.0
+  bayesian_prior_strength: 10  # Equivalent to this many observations
+
+# =============================================================================
+# CREDIBILITY SCORING (Final)
+# =============================================================================
+scoring:
+  # Weights for final score (must sum to 1.0)
+  weights:
+    mean_alpha: 0.35
+    win_rate: 0.20
+    first_mover_rate: 0.15
+    sentiment_accuracy: 0.15
+    consistency: 0.15
+
+  # Penalties
+  pump_penalty: 0.5  # Multiplier for users flagged as pumpers
+
+# =============================================================================
+# PROCESSING
+# =============================================================================
+processing:
+  # Progress logging interval (rows)
+  log_interval: 10000
+
+  # Random sample size for validation
+  validation_sample_size: 10

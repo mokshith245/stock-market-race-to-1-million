@@ -1,0 +1,5 @@
+{"author": "user1", "id": "abc123"}
+not valid json at all
+{"author": "user2", "id": "def456"}
+{malformed json here
+{"author": "user3", "id": "ghi789"}

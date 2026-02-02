@@ -1,0 +1,27 @@
+# Stock Prediction Credibility Scoring System - Dependencies
+
+# Data processing
+pandas>=2.0
+numpy>=1.24
+pyarrow>=14.0
+
+# Price data
+yfinance>=0.2.36
+
+# NLP - Ticker extraction
+spacy>=3.7
+
+# NLP - Sentiment classification
+transformers>=4.36
+torch>=2.1
+
+# File handling
+zstandard>=0.22
+orjson>=3.9
+pyyaml>=6.0
+
+# Progress display
+tqdm>=4.66
+
+# Testing
+pytest>=7.0
