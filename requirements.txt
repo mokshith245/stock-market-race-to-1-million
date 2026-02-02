@@ -9,7 +9,9 @@ pyarrow>=14.0
 yfinance>=0.2.36
 
 # NLP - Ticker extraction
-spacy>=3.7
+# TODO: Add spacy>=3.7 when Python 3.14 compatibility is fixed
+#       (pydantic v1 dependency issue - see https://github.com/explosion/spaCy/issues)
+#       For now, using regex-only ticker extraction
 
 # NLP - Sentiment classification
 transformers>=4.36
@@ -19,6 +21,9 @@ torch>=2.1
 zstandard>=0.22
 orjson>=3.9
 pyyaml>=6.0
+
+# HTTP requests
+requests>=2.31
 
 # Progress display
 tqdm>=4.66

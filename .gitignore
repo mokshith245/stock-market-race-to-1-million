@@ -3,7 +3,7 @@ r_TheRaceTo10Million_comments.jsonl
 r_TheRaceTo10Million_posts.jsonl
 
 # Documentation
-CLAUDE.md
+*.md
 
 # Python
 __pycache__/
